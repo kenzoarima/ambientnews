@@ -5,8 +5,8 @@
 </head>
 <body>
     <div id="rssdata">
-	<div class="rss-items"></div>
-	<div class="loading">Loading RSS items...</div>
+    <div class="rss-items"></div>
+    <div class="loading">Loading RSS items...</div>
     </div>
     <div class="weather_area">
         <div class="temp_section">
@@ -21,6 +21,7 @@
         <div class="next_button running"></div>
     </div>
 </body>
+<script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.nav_area .prev_button').click(function(e) {
@@ -35,8 +36,49 @@ $(document).ready(function() {
     });
 });
 
+function getData() {
+  var dataUrls = [
+    "https://www.straitstimes.com/news/singapore/rss.xml",
+    "https://www.channelnewsasia.com/rssfeeds/8395986"
+  ];
+
+  dataUrls.forEach(function(dataUrl) {
+    getDataFromUrl(dataUrl);
+  });
+}
+
+function getDataFromUrl(feedUrl) {
+  //var feedUrl = "https://www.straitstimes.com/news/singapore/rss.xml";
+  var feed = new google.feeds.Feed(feedUrl);
+  feed.load(function(result) {
+    if (!result.error) {
+      //console.log("load feed", result.feed.entries);
+      populateDataOnPage(result.feed.entries);
+      return result.feed.entries;
+    } else {
+      return [];
+    }
+  });
+}
+
+function populateDataOnPage(data) {
+  var container = document.getElementById("rssdata");
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+    var entry = data[i];
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(entry.title));
+    container.appendChild(div);
+  }
+}
+
 $('#rssdata').ready(function () {
-$.when(
+    google.load("feeds", "1");
+    google.setOnLoadCallback(getData);
+    
+
+
+/*$.when(
     $.ajax({
         url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=15&q=http://www.channelnewsasia.com/starterkit/servlet/cna/rss/home.xml',
         dataType: 'jsonp',
@@ -72,9 +114,9 @@ $.when(
     var refreshItem; var stepfx; var currItem = 1; var totalItem = $('#rssdata .rss-items > div').length;
 
     refreshItem = setInterval(function() {
-    	stepfx = Number( $('input[name=stepfx]').val() );
+        stepfx = Number( $('input[name=stepfx]').val() );
         currItem = ((currItem + stepfx) % totalItem);
-    	if (currItem == 0) currItem = totalItem;
+        if (currItem == 0) currItem = totalItem;
 
         var toppos = $('#rssdata .rss-items > div:nth-child('+ currItem +')').position().top;
 
@@ -82,7 +124,7 @@ $.when(
 
     }, 8000);
 
-});
+});*/
 });
 </script>
 </html>
