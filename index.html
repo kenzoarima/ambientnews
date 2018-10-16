@@ -23,6 +23,8 @@
 </body>
 <script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
 <script type="text/javascript">
+var refreshInterval = 8000;
+
 $(document).ready(function() {
     $('.nav_area .prev_button').click(function(e) {
         $('input[name=stepfx]').val(-1);
@@ -36,6 +38,34 @@ $(document).ready(function() {
     });
 });
 
+function animateDat() {
+  $('#rssdata div.loading').fadeOut();
+  $('#rssdata .rss-items').slideDown();
+
+  if (refreshItem) {
+    clearInterval(refreshItem);
+  }
+
+  var refreshItem;
+  var stepfx;
+  var currItem = 1;
+  var totalItem = document.querySelectorAll('#rssdata .rss-items > div').length;
+
+  refreshItem = setInterval(function() {
+    stepfx = Number( document.querySelector('input[name=stepfx]').value );
+    currItem = ((currItem + stepfx) % totalItem);
+    //console.log("currItem",  currItem);
+    
+    if (currItem == 0) {
+      currItem = totalItem;
+    }
+
+    var toppos = $('#rssdata .rss-items > div:nth-child('+ currItem +')').position().top;
+    $('#rssdata .rss-items').css('top',0-toppos);
+
+  }, refreshInterval);
+}
+
 function getData() {
   var dataUrls = [
     "https://www.straitstimes.com/news/singapore/rss.xml",
@@ -45,11 +75,14 @@ function getData() {
   dataUrls.forEach(function(dataUrl) {
     getDataFromUrl(dataUrl);
   });
+
+  setTimeout(function() {
+    animateDat();
+  }, 500);
 }
 
-function getDataFromUrl(feedUrl) {
-  //var feedUrl = "https://www.straitstimes.com/news/singapore/rss.xml";
-  var feed = new google.feeds.Feed(feedUrl);
+function getDataFromUrl(dataUrl) {
+  var feed = new google.feeds.Feed(dataUrl);
   feed.load(function(result) {
     if (!result.error) {
       //console.log("load feed", result.feed.entries);
@@ -63,68 +96,17 @@ function getDataFromUrl(feedUrl) {
 
 function populateDataOnPage(data) {
   var container = document.getElementById("rssdata");
-  console.log(data);
+  //console.log(data);
   for (var i = 0; i < data.length; i++) {
     var entry = data[i];
-    var div = document.createElement("div");
-    div.appendChild(document.createTextNode(entry.title));
-    container.appendChild(div);
+    var item_html = '<div class=""><a target="_blank" href="' + entry.link + '">' + entry.title + '</a><div class="durationbar"></div><p>'+ entry.content +'</p></div>';
+    $('#rssdata .rss-items').append(item_html);
   }
 }
 
 $('#rssdata').ready(function () {
-    google.load("feeds", "1");
-    google.setOnLoadCallback(getData);
-    
-
-
-/*$.when(
-    $.ajax({
-        url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=15&q=http://www.channelnewsasia.com/starterkit/servlet/cna/rss/home.xml',
-        dataType: 'jsonp',
-        crossDomain: true,
-        success: function (data) {
-            $(data.responseData.feed.entries).each(function (index, entry) {
-                var item_html = '<div class=""><a target="_blank" href="' + entry.link + '">' + entry.title + '</a><div class="durationbar"></div><p>'+ entry.content +'</p></div>';
-                $('#rssdata .rss-items').append(item_html);
-            });
-        },
-        error: function () {}
-
-    }),
-    $.ajax({
-        url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=15&q=http://dribbble.com/shots/popular.rss',
-        dataType: 'jsonp',
-        crossDomain: true,
-        success: function (data) {
-            $(data.responseData.feed.entries).each(function (index, entry) {
-                var item_html = '<div class=""><a target="_blank" href="' + entry.link + '">' + entry.title + '</a><div class="durationbar"></div><p>'+ entry.content +'</p></div>';
-                $('#rssdata .rss-items').append(item_html);
-            });
-        },
-        error: function () {}
-
-    })
-).done(function() {
-
-    $('#rssdata div.loading').fadeOut();
-    $('#rssdata .rss-items').slideDown();
-
-    if ( refreshItem ) clearInterval(refreshItem);
-    var refreshItem; var stepfx; var currItem = 1; var totalItem = $('#rssdata .rss-items > div').length;
-
-    refreshItem = setInterval(function() {
-        stepfx = Number( $('input[name=stepfx]').val() );
-        currItem = ((currItem + stepfx) % totalItem);
-        if (currItem == 0) currItem = totalItem;
-
-        var toppos = $('#rssdata .rss-items > div:nth-child('+ currItem +')').position().top;
-
-        $('#rssdata .rss-items').css('top',0-toppos);
-
-    }, 8000);
-
-});*/
+  google.load("feeds", "1");
+  google.setOnLoadCallback(getData);
 });
 </script>
 </html>
