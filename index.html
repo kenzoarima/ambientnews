@@ -23,7 +23,13 @@
 </body>
 <script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
 <script type="text/javascript">
-var refreshInterval = 8000;
+const app = {
+  "refreshInterval": 8000,
+  "dataUrls": [
+    "https://www.straitstimes.com/news/singapore/rss.xml",
+    "https://www.channelnewsasia.com/rssfeeds/8395986"
+  ]
+};
 
 $(document).ready(function() {
     $('.nav_area .prev_button').click(function(e) {
@@ -38,7 +44,7 @@ $(document).ready(function() {
     });
 });
 
-function animateDat() {
+function displayData() {
   $('#rssdata div.loading').fadeOut();
   $('#rssdata .rss-items').slideDown();
 
@@ -63,34 +69,30 @@ function animateDat() {
     var toppos = $('#rssdata .rss-items > div:nth-child('+ currItem +')').position().top;
     $('#rssdata .rss-items').css('top',0-toppos);
 
-  }, refreshInterval);
+  }, app.refreshInterval);
 }
 
-function getData() {
-  var dataUrls = [
-    "https://www.straitstimes.com/news/singapore/rss.xml",
-    "https://www.channelnewsasia.com/rssfeeds/8395986"
-  ];
-
-  dataUrls.forEach(function(dataUrl) {
-    getDataFromUrl(dataUrl);
-  });
-
-  setTimeout(function() {
-    animateDat();
-  }, 500);
+async function getData() {
+  for (var i = 0; i < app.dataUrls.length; i++) {
+    var data = await getDataFromUrl(app.dataUrls[i]);
+    await populateDataOnPage(data);
+  }
+  displayData();
+  
+  // app.dataUrls.forEach(function(dataUrl) {});
 }
 
 function getDataFromUrl(dataUrl) {
-  var feed = new google.feeds.Feed(dataUrl);
-  feed.load(function(result) {
-    if (!result.error) {
-      //console.log("load feed", result.feed.entries);
-      populateDataOnPage(result.feed.entries);
-      return result.feed.entries;
-    } else {
-      return [];
-    }
+  return new Promise(function(resolve) {
+    var feed = new google.feeds.Feed(dataUrl);
+    feed.load(function(result) {
+      if (!result.error) {
+        //console.log("load feed", result.feed.entries);
+        resolve(result.feed.entries);
+      } else {
+        resolve([]);
+      }
+    });
   });
 }
 
@@ -104,7 +106,7 @@ function populateDataOnPage(data) {
   }
 }
 
-$('#rssdata').ready(function () {
+$('#rssdata').ready(function() {
   google.load("feeds", "1");
   google.setOnLoadCallback(getData);
 });
