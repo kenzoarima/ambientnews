@@ -9,7 +9,7 @@ phases:
       - export PATH=$PATH:./sonar-scanner-3.3.0.1492-linux/bin/
   build:
     commands:
-      - echo PATH
+      - echo $PATH
       - sonar-scanner
 artifacts:
   files:
