@@ -10,7 +10,9 @@ phases:
   build:
     commands:
       - echo $PATH
-      - sonar-scanner
+      - ./sonar-scanner-3.3.0.1492-linux/bin/sonar-scanner
 artifacts:
   files:
     - '**/*'
+  base-directory: 'ambientnews*'
+  discard-paths: yes
