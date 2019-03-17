@@ -2,10 +2,10 @@ version: 0.0
 os: linux
 files:
   - source: index.html
-    destination: /var/www/html/index.html
+    destination: /var/www/html
     overwrite: true
   - source: app.css
-    destination: /var/www/html/app.css
+    destination: /var/www/html
     overwrite: true
 hooks:
   BeforeInstall:
