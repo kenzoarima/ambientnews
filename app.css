@@ -5,6 +5,7 @@ body {
   background: black;/*cornflowerblue*/
   color: #ededed;
   overflow: hidden;
+  margin: 0;
 }
 #rssdata {
   height: 98%;
@@ -24,6 +25,7 @@ body {
   overflow: hidden;
   opacity: 1;
   transition: 0.5s;
+  word-break: break-word;
 }
 #rssdata .rss-items > div.hiden,
 #rssdata .rss-items > div > div {
@@ -36,7 +38,7 @@ body {
   padding: 2px 6px;
   background: rgba(0,0,0,0.1);
   color: #fff;
-  font-size: 72px;
+  font-size: 26px;
   text-decoration: none;
   border-bottom: 1px dotted rgba(255,255,255,0.3);
   transition: 0.3s;
@@ -49,6 +51,18 @@ body {
   float: left; width: auto; margin-right: 20px; height: 45%;
 }
 #rssdata .rss-items div p {
+  font-size: 20px;
+}
+@media (min-width: 768px) {
+  #rssdata .rss-items > div {
+    padding: 10px;
+  }
+  #rssdata .rss-items > div > a {
+    font-size: 72px;
+  }
+  #rssdata .rss-items div p {
+    font-size: 32px;
+  }
 }
 .nav_area {
   position: absolute;
