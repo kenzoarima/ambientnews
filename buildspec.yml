@@ -14,5 +14,4 @@ phases:
       - ls -al
 artifacts:
   files:
-    - 'app.css'
-    - 'index.html'
+    - '**/*'
