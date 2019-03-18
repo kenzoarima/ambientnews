@@ -16,7 +16,7 @@ phases:
   post_build:
     commands:
       - export TESTKK="ERROR" #"$(curl -s -u 716cb3fe910a6b045112c469b81ff08f712b1ec0: https://sonarcloud.io/api/qualitygates/project_status?projectKey=testphp1 | jq '.projectStatus.status')"
-      - if [[ "$TESTKK" == "ERROR" ]]; then exit 1; fi
+      - if "$TESTKK" == "ERROR" ; then exit 1; fi
 artifacts:
   files:
     - '**/*'
