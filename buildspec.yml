@@ -4,6 +4,7 @@ phases:
   install:
     commands:
       - echo installing
+      - printenv
       - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
       - unzip sonar-scanner-cli-3.3.0.1492-linux.zip
       - export PATH=$PATH:./sonar-scanner-3.3.0.1492-linux/bin/
@@ -13,10 +14,12 @@ phases:
       - echo $PATH
       - ./sonar-scanner-3.3.0.1492-linux/bin/sonar-scanner
       - ls -al
-  post_build:
-    commands:
-      - export TESTKK="ERROR" #"$(curl -s -u 716cb3fe910a6b045112c469b81ff08f712b1ec0: https://sonarcloud.io/api/qualitygates/project_status?projectKey=testphp1 | jq '.projectStatus.status')"
-      - if "$TESTKK" == "ERROR" ; then exit 1; fi
+      - chmod a+x checksonar.sh
+      - ./checksonar.sh
+  #post_build:
+    #commands:
+      #- export TESTKK="ERROR" #"$(curl -s -u 716cb3fe910a6b045112c469b81ff08f712b1ec0: https://sonarcloud.io/api/qualitygates/project_status?projectKey=testphp1 | jq '.projectStatus.status')"
+      #- if "$TESTKK" == "ERROR" ; then exit 1; fi
 artifacts:
   files:
     - '**/*'
