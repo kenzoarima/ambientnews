@@ -17,7 +17,7 @@ phases:
       #- chmod a+x checksonar.sh
       #- ./checksonar.sh
       - export TESTKK="ERROR" #"$(curl -s -u 716cb3fe910a6b045112c469b81ff08f712b1ec0: https://sonarcloud.io/api/qualitygates/project_status?projectKey=testphp1 | jq '.projectStatus.status')" #"ERROR"
-      - if "$TESTKK" == "ERROR" ; then exit 1; fi
+      - if [ "$TESTKK" == "ERROR" ] ; then exit 1; fi
   #post_build:
     #commands:
 artifacts:
