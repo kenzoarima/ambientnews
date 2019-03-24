@@ -18,8 +18,10 @@ phases:
       #- ./checksonar.sh
       - export TESTKK="ERROR" #"$(curl -s -u 716cb3fe910a6b045112c469b81ff08f712b1ec0: https://sonarcloud.io/api/qualitygates/project_status?projectKey=testphp1 | jq '.projectStatus.status')" #"ERROR"
       - if expr "$TESTKK" == "ERROR" ; then exit 1; fi
-  #post_build:
-    #commands:
+  post_build:
+    commands:
+      - echo $CODEBUILD_BUILD_SUCCEEDING
+      - if expr "$CODEBUILD_BUILD_SUCCEEDING" == 0 ; then exit 1; fi
 artifacts:
   files:
     - '**/*'
