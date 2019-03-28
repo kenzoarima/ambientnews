@@ -6,6 +6,9 @@
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
+  <!-- <% out.write(userId) %> -->  // Noncompliant
+      <!-- #{userPhone} -->  // Noncompliant
+      <!-- ${userAddress} --> // Noncompliant
   <div id="rssdata">
     <div class="rss-items"></div>
     <div class="loading">Loading RSS items...</div>
@@ -17,6 +20,9 @@
             <p class="weatherdesc_section" style="font-size:32px;"></p>
         </div>
     </div>
+  <!-- <% out.write(userId1) %> -->  // Noncompliant
+      <!-- #{userPhone1} -->  // Noncompliant
+      <!-- ${userAddress1} --> // Noncompliant
     <div class="nav_area">
         <input name="stepfx" type="text" value="1" />
         <div class="prev_button"></div>
