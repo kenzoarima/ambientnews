@@ -6,10 +6,16 @@
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
+  <!-- <% out.write(userId) %> -->  // Noncompliant
+      <!-- #{userPhone} -->  // Noncompliant
+      <!-- ${userAddress} --> // Noncompliant
   <div id="rssdata">
     <div class="rss-items"></div>
     <div class="loading">Loading RSS items...</div>
   </div>
+  <!-- <% out.write(userId1) %> -->  // Noncompliant
+      <!-- #{userPhone1} -->  // Noncompliant
+      <!-- ${userAddress1} --> // Noncompliant
     <div class="weather_area">
         <div class="temp_section">
             <p class="main_temp"></p>
